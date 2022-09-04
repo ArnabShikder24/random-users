@@ -62,10 +62,14 @@ const updateUser = async (req, res) => {
 const bulkUpdate = async (req, res) => {
       try {
             const users = req.body
-    if (_.isEmpty(req.body) == false) {
-        const NewPersonsList = usersModel;
+
+            if (_.isEmpty(req.body) == false) {
+
+            const NewPersonsList = usersModel;
+
         users.map((user) => {
-            const MatchedList = _.findWhere(NewPersonsList, { id: user.id })
+            const MatchedList = _.findWhere(NewPersonsList, { id: user.id });
+
             MatchedList.photoUrl = user.photoUrl
             MatchedList.name = user.name
             MatchedList.gender = user.gender
@@ -73,6 +77,7 @@ const bulkUpdate = async (req, res) => {
             MatchedList.phone = user.phone
             MatchedList.address = user.address
         })
+
         fs.writeFileSync(__dirname + "/../Persons.json", JSON.stringify(NewPersonsList));
         res.status(200).json(NewPersonsList)
     }
