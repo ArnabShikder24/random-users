@@ -1,4 +1,5 @@
 const fs = require('fs');
+const _ = require('underscore');
 const usersModel = require("../models/user.model");
 
 const getAllUser = async (req, res) => {
@@ -60,7 +61,26 @@ const updateUser = async (req, res) => {
 
 const bulkUpdate = async (req, res) => {
       try {
-            
+            const users = req.body
+    if (_.isEmpty(req.body) == false) {
+        const NewPersonsList = usersModel;
+        users.map((user) => {
+            const MatchedList = _.findWhere(NewPersonsList, { id: user.id })
+            MatchedList.photoUrl = user.photoUrl
+            MatchedList.name = user.name
+            MatchedList.gender = user.gender
+            MatchedList.email = user.email
+            MatchedList.phone = user.phone
+            MatchedList.address = user.address
+        })
+        fs.writeFileSync(__dirname + "/../Persons.json", JSON.stringify(NewPersonsList));
+        res.status(200).json(NewPersonsList)
+    }
+    else {
+        res.send({
+            message: "Please Give a body with _id"
+        })
+    }
       } catch (error) {
             res.status(500).send(error.message); 
       }
